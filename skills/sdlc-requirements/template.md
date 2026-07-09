@@ -29,10 +29,12 @@ derived-from: —          # requirements is the root artifact of the cycle
 
 ## Acceptance criteria
 
-<!-- Filled by the specification phase. EARS format, one or more per REQ:
+<!-- Filled by the specification phase. EARS format, one or more per REQ and
+     NFR; the criterion ID mirrors its requirement (REQ-001-AC1, NFR-001-AC1):
      REQ-001-AC1: WHEN <trigger> THE SYSTEM SHALL <response>
      REQ-001-AC2: THE SYSTEM SHALL <response>            (ubiquitous)
      REQ-002-AC1: WHILE <state> WHEN <trigger> THE SYSTEM SHALL <response>
+     NFR-001-AC1: THE SYSTEM SHALL <response> within <measurable limit>
 -->
 
 ## Open questions

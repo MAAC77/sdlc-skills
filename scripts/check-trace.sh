@@ -3,10 +3,12 @@
 #
 #   scripts/sdlc/check-trace.sh <feature-dir> <test-dir> [test-dir...]
 #
-# Direction 1: acceptance-criterion IDs (REQ-NNN-ACn) declared in
+# Direction 1: acceptance-criterion IDs (REQ/NFR-NNN-ACn) declared in
 #              <feature-dir>/requirements.md that no test file references.
-# Direction 2: REQ-NNN IDs referenced in test files that don't exist in
+# Direction 2: REQ/NFR-NNN IDs referenced in test files that don't exist in
 #              requirements.md.
+# Direction 3: acceptance-criterion IDs (REQ/NFR-NNN-ACn) referenced in test
+#              files whose criterion is not declared in requirements.md.
 # Exit 0 = clean, 1 = findings, 2 = usage error.
 
 set -eu
@@ -22,8 +24,8 @@ TMP="${TMPDIR:-/tmp}/check-trace.$$"
 mkdir -p "$TMP"
 trap 'rm -rf "$TMP"' EXIT
 
-# IDs declared in requirements.md
-grep -oE 'REQ-[0-9]+-AC[0-9]+' "$REQS" | sort -u > "$TMP/declared_acs"
+# IDs declared in requirements.md (criteria cover both REQ and NFR)
+grep -oE '(REQ|NFR)-[0-9]+-AC[0-9]+' "$REQS" | sort -u > "$TMP/declared_acs"
 grep -oE '(REQ|NFR)-[0-9]+' "$REQS" | sort -u > "$TMP/declared_reqs"
 
 # IDs referenced anywhere under the test dirs (case-insensitive: test names
@@ -52,5 +54,13 @@ if [ -n "$PHANTOM" ]; then
     echo "$PHANTOM" | sed 's/^/  /'
 fi
 
-[ "$STATUS" -eq 0 ] && echo "trace clean: every criterion has a test, every referenced ID exists"
+# Direction 3: criteria referenced by tests but not declared (phantom AC)
+PHANTOM_AC="$(comm -13 "$TMP/declared_acs" "$TMP/referenced_acs")"
+if [ -n "$PHANTOM_AC" ]; then
+    STATUS=1
+    echo "PHANTOM — criteria referenced in tests but absent from $REQS:"
+    echo "$PHANTOM_AC" | sed 's/^/  /'
+fi
+
+[ "$STATUS" -eq 0 ] && echo "trace clean: every criterion has a test, every referenced ID and criterion exists"
 exit "$STATUS"

@@ -16,14 +16,17 @@ new artifact.
    (check `CONTEXT.md`), unstated limits. Ask the user one at a time; record
    each answer by tightening the REQ wording or adding to Open questions
    resolved.
-2. **Write acceptance criteria in EARS format**, one or more per REQ, in the
-   Acceptance criteria section:
+2. **Write acceptance criteria in EARS format**, one or more per REQ and per
+   NFR, in the Acceptance criteria section. The criterion ID mirrors its
+   requirement: `REQ-001-AC1` for functional, `NFR-001-AC1` for
+   non-functional — both are greppable and traced by `check-trace.sh`.
    - `REQ-001-AC1: WHEN <trigger> THE SYSTEM SHALL <response>`
    - `REQ-001-AC2: THE SYSTEM SHALL <response>` (ubiquitous)
    - `WHILE <state> WHEN <trigger> THE SYSTEM SHALL <response>` (stateful)
+   - `NFR-001-AC1: THE SYSTEM SHALL <response> within <measurable limit>`
    Each criterion must be verifiable by a single test — if you can't imagine
-   the test, the criterion is not specific enough. The IDs are greppable and
-   will be referenced by test names in implementation.
+   the test, the criterion is not specific enough. Test names carry the ID
+   (e.g. `test_req_001_ac1_...`, `test_nfr_001_ac1_...`).
 3. **Completeness check** before proposing approval:
    - Every REQ and NFR has at least one criterion.
    - No open question blocks a `must` requirement.
