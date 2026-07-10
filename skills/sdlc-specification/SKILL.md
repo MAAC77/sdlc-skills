@@ -16,7 +16,17 @@ new artifact.
    (check `CONTEXT.md`), unstated limits. Ask the user one at a time; record
    each answer by tightening the REQ wording or adding to Open questions
    resolved.
-2. **Write acceptance criteria in EARS format**, one or more per REQ and per
+2. **Triage structural instructions.** When the user prescribes structure —
+   "inherit from X", "use library Y", "follow pattern Z" — that is a design
+   or constitution constraint, not a requirement. Route it to the cycle's
+   `design.md` (or `constitution.md` if project-wide), and remove it from
+   requirements.md if it was drafted as a REQ. Only its **observable
+   effect** may be a REQ: "entities inherit AuditEntity" yields a criterion
+   about audit fields being recorded on write, never an `instanceof` check.
+   Litmus test: if a criterion could only fail by editing one specific
+   line, it verifies structure, not behavior — move the constraint to
+   design and drop the criterion (or propose rescaling to `direct`).
+3. **Write acceptance criteria in EARS format**, one or more per REQ and per
    NFR, in the Acceptance criteria section. The criterion ID mirrors its
    requirement: `REQ-001-AC1` for functional, `NFR-001-AC1` for
    non-functional — both are greppable and traced by `check-trace.sh`.
@@ -27,7 +37,7 @@ new artifact.
    Each criterion must be verifiable by a single test — if you can't imagine
    the test, the criterion is not specific enough. Test names carry the ID
    (e.g. `test_req_001_ac1_...`, `test_nfr_001_ac1_...`).
-3. **Completeness check** before proposing approval:
+4. **Completeness check** before proposing approval:
    - Every REQ and NFR has at least one criterion.
    - No open question blocks a `must` requirement.
    - Nothing contradicts `constitution.md`.

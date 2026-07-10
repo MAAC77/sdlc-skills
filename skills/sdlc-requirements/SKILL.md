@@ -36,6 +36,9 @@ this skill's directory:
 
 - Functional requirements as `REQ-001`, `REQ-002`, ... — one testable
   sentence each, with priority (must/should/could).
+- **Structural instructions are not requirements.** If the user prescribes
+  structure ("inherit from X", "use library Y"), note it for `design.md` or
+  `constitution.md` — a REQ captures only its observable effect, if any.
 - Non-functional requirements as `NFR-001`, ...
 - Out of scope section — explicit.
 - Open questions — anything unresolved, and what it blocks.
