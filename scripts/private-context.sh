@@ -27,6 +27,14 @@ CONTEXT_ARG="${2:-$HOME/sdlc-context/$(basename "$TARGET")}"
 mkdir -p "$CONTEXT_ARG"
 CONTEXT="$(cd "$CONTEXT_ARG" && pwd)"
 
+# The context dir holds the *content* of docs/project, never a project.
+# A docs/project inside it means a full project clone was passed by mistake.
+if [ -d "$CONTEXT/docs/project" ]; then
+    echo "error: $CONTEXT looks like a project (it contains docs/project) —" \
+         "pass that subdirectory instead: $CONTEXT/docs/project" >&2
+    exit 1
+fi
+
 # Refuse to hide files the shared repo already tracks
 if [ -d "$TARGET/.git" ] \
    && git -C "$TARGET" ls-files --error-unmatch docs/project >/dev/null 2>&1; then
