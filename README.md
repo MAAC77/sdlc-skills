@@ -38,6 +38,20 @@ Then open your agent and ask it to use the `sdlc` skill. The first run
 initializes `docs/project/` (STATE.md, constitution.md, CONTEXT.md) through a
 short interview.
 
+### Private context (shared/company repos)
+
+If the repository is shared and you don't want your SDLC context committed:
+
+```sh
+./scripts/private-context.sh /path/to/your/project
+```
+
+This moves `docs/project/` to `~/sdlc-context/<project-name>` (pass a second
+argument to change it), gives it its own git repo — so the handoff's commit
+step still protects it — symlinks it back into place, and hides the link and
+any untracked template files via `.git/info/exclude`. Paths keep working,
+and teammates and the shared `.gitignore` are never affected.
+
 ## How it works
 
 The `sdlc` orchestrator reads STATE.md and routes to the active phase skill.
@@ -73,7 +87,8 @@ skills/
 └── sdlc-risk/            umbrella — risk register
 scripts/
 ├── install.sh            vendoring installer (POSIX sh, zero dependencies)
-└── check-trace.sh        REQ-ID traceability check, both directions
+├── check-trace.sh        REQ-ID traceability check, both directions
+└── private-context.sh    keep docs/project/ private in a shared repo (symlink + local exclude)
 ```
 
 ## Portability rules
